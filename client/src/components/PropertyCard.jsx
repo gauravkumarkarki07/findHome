@@ -4,7 +4,7 @@ import ButtonTypeButton from '../components/buttonTypeButton.jsx';
 import { useState } from "react";
 
 export default function PropertyCard({ property }) {
-  const { title, propertyImage, pricePerWeek, bedroom, bathroom, propertyType, address } = property;
+  const { _id,title, propertyImage, pricePerWeek, bedroom, bathroom, propertyType, address } = property;
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -12,7 +12,8 @@ export default function PropertyCard({ property }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="flex flex-col gap-2">
+      <span className="hidden" id={_id}>PropertyId</span>
+      <div className={`flex flex-col gap-2 ${isHovered?'filter blur-sm':''}`}>
         <img src={propertyImage} alt={title} className="w-full h-52 object-contain mb-4" />
         <h2 className="text-md font-semibold">{address}</h2>
         <div className="mt-2 flex justify-between items-center">

@@ -51,7 +51,7 @@ export default function MyProperties() {
             <Link to='/addproperty'>
                 <ButtonTypeButton title={'Add New Property'}/>    
             </Link>
-            <div className='grid grid-cols-3 gap-5 justify-center'>
+            <div className='grid grid-cols-2 gap-5 justify-center'>
               {properties.map(property => (
                 <div key={property._id}>
                   <PropertyCard property={property} />

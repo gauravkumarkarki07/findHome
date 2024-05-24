@@ -14,6 +14,9 @@ const  userSlice=createSlice({
         loading:(state)=>{
             state.loading=true;
         },
+        loadingStop:(state)=>{
+            state.loading=false;
+        },
         loginSuccess:(state,action)=>{
             state.loading=false;
             state.success=action.payload;
@@ -62,7 +65,7 @@ const  userSlice=createSlice({
     }
 })
 
-export const{loading,loginSuccess,
+export const{loading, loadingStop, loginSuccess,
             loginFailure,logoutSuccess,
             logoutFailure,
             updateProfileFailure,updateProfileSuccess,

@@ -23,10 +23,11 @@ app.listen(process.env.port,()=>{
 app.use(express.json());
 app.use(cookieParser());
 
+
+app.use('/api/auth',AuthRoute);
+
 app.use('*',(req,res)=>{
     res.status(400).json({
         message:"No route available"
     })
 })
-
-app.use('/api/auth',AuthRoute);

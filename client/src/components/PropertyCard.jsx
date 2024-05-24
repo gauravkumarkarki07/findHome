@@ -13,7 +13,7 @@ export default function PropertyCard({ property }) {
     >
       <span className="hidden" id={_id}>PropertyId</span>
       <div className={`flex flex-col gap-2 h-[330px] w-[300px] ${isHovered?'filter blur-sm':''}`}>
-        <img src={propertyImage} alt={title} className="w-full h-52 object-contain mb-4" />
+        <img src={propertyImage} alt={title} className="w-full h-52 object-fill mb-4" />
         <h2 className="text-md font-semibold">{address}</h2>
         <div className="mt-2 flex justify-between items-center">
           <div className="flex gap-5 items-center">

@@ -123,3 +123,31 @@ export const GetMyProperties=async(req,res)=>{
     }
     
 }
+
+export const GetAllProperties=async(req,res)=>{
+    if(req.token.id!==req.params.id){
+        res.status(400).json({
+            message:"You are not authorized to access this data"
+        })
+        return
+    }
+    try{
+        const properties=await propertyModel.find();
+        if(!properties){
+            res.status(200).json({
+                properties:[],
+            })
+            return
+        }
+        res.status(200).json({
+            properties:properties,
+            message:"Listed Properties"
+        })
+    }
+    catch (error) {
+        res.status(500).json({
+             message: "Internal Server Error" 
+        });
+    }
+    
+}

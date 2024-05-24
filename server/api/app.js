@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import AuthRoute from './routes/authRoute.js';
+import UserRoute from './routes/userRoute.js';
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ app.use(cookieParser());
 
 
 app.use('/api/auth',AuthRoute);
+app.use('/api/user',UserRoute);
+
 
 app.use('*',(req,res)=>{
     res.status(400).json({

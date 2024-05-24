@@ -1,6 +1,5 @@
 import { IoBedOutline } from "react-icons/io5";
 import { FaShower } from "react-icons/fa6";
-import ButtonTypeButton from '../components/buttonTypeButton.jsx';
 import { useState } from "react";
 
 export default function PropertyCard({ property }) {
@@ -13,7 +12,7 @@ export default function PropertyCard({ property }) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <span className="hidden" id={_id}>PropertyId</span>
-      <div className={`flex flex-col gap-2 ${isHovered?'filter blur-sm':''}`}>
+      <div className={`flex flex-col gap-2 h-[330px] w-[300px] ${isHovered?'filter blur-sm':''}`}>
         <img src={propertyImage} alt={title} className="w-full h-52 object-contain mb-4" />
         <h2 className="text-md font-semibold">{address}</h2>
         <div className="mt-2 flex justify-between items-center">
@@ -28,8 +27,20 @@ export default function PropertyCard({ property }) {
       {isHovered && (
         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
           <div className="flex flex-col gap-2 w-60">
-            <ButtonTypeButton title='Edit'/>
-            <ButtonTypeButton title='Delete'/>
+              <button
+                type="button"
+                className="rounded-full px-4 py-2 bg-cyan-800 text-white w-full hover:bg-cyan-950"
+              
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                className="rounded-full px-4 py-2 bg-red-600 text-white w-full hover:bg-red-800"
+              
+              >
+                Delete
+              </button>
           </div>
         </div>
       )}

@@ -38,7 +38,7 @@ const propertySchema=new mongoose.Schema({
         required:true,
     },
     
-})
+},{timestamps:true})
 
 const propertyModel=mongoose.model('PropertyModel',propertySchema);
 export default propertyModel;

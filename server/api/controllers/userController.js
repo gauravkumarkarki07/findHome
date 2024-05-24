@@ -1,3 +1,4 @@
+import propertyModel from '../models/propertyModel.js';
 import userModel from '../models/userModel.js';
 
 export const Logout=async(req,res)=>{
@@ -59,7 +60,66 @@ export const DeleteUser=async(req,res)=>{
 
     }
     catch (error) {
-        console.error(error);
         res.status(500).json({ message: "Internal Server Error" });
     }
+}
+
+export const AddProperty=async(req,res)=>{
+    const{userId,title,description,propertyImage,pricePerWeek,bedroom,bathroom,propertyType,address}=req.body;
+    if (req.token.id !== userId) {
+        res.status(400).json({
+            message: "You are not allowed to create property"
+        });
+        return;
+    }
+    try {
+        const newProperty=new propertyModel({
+            userId:userId,
+            title:title,
+            description:description,
+            propertyImage:propertyImage,
+            pricePerWeek:pricePerWeek,
+            bedroom:bedroom,
+            bathroom:bathroom,
+            propertyType:propertyType,
+            address:address,
+        })
+        await newProperty.save();
+        res.status(200).json({
+            message:"Property Added Successfully"
+        })
+    } 
+    catch (error) {
+        res.status(500).json({
+             message: "Internal Server Error" 
+        });
+    }
+}
+
+export const GetMyProperties=async(req,res)=>{
+    if(req.token.id!==req.params.id){
+        res.status(400).json({
+            message:"You are not authorized to access this data"
+        })
+        return
+    }
+    try{
+        const properties=await propertyModel.find({userId:req.params.id});
+        if(!properties){
+            res.status(200).json({
+                properties:[],
+            })
+            return
+        }
+        res.status(200).json({
+            properties:properties,
+            message:"Your Listed Properties"
+        })
+    }
+    catch (error) {
+        res.status(500).json({
+             message: "Internal Server Error" 
+        });
+    }
+    
 }

@@ -20,6 +20,7 @@ export default function AddProperty() {
     }
 
   const initialState = {
+    userId:session.userDetails._id,
     title: '',
     description: '',
     propertyImage: '',
@@ -73,12 +74,29 @@ export default function AddProperty() {
     }
 }
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async(e) => {
     e.preventDefault();
-    console.log(formData);
-    alert('Form submitted successfully!');
-    setFormData(initialState); // Reset form after submission
+    console.log(formData)
+    try {
+      const response=await fetch('/api/user/addproperty',{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify(formData)
+      })
+      const responseData=await response.json();
+      if(response.ok){
+        showSuccessMessage(responseData.message);
+        return;
+      }
+      showErrorMessage(responseData.message);
+
+    } catch (error) {
+      showErrorMessage(error.message);
+    }
   };
+  
 
   return (
     <div className="flex flex-col gap-8 items-center py-4">

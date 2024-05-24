@@ -68,11 +68,11 @@ export default function LoggedInHeader() {
                     </Link>
                 </div>
                 <ul className='flex gap-5 items-center'>
-                    <Link to='/' className='hover:bg-cyan-800 px-2 py-2 rounded-lg'>
-                        <li>Home</li>
+                    <Link to='/findproperty' className='hover:bg-cyan-800 px-2 py-2 rounded-lg'>
+                        <li>Find Property</li>
                     </Link>
-                    <Link to='/aboutus' className='hover:bg-cyan-800 px-2 py-2 rounded-lg'>
-                        <li>AboutUs</li>
+                    <Link to='/myproperties' className='hover:bg-cyan-800 px-2 py-2 rounded-lg'>
+                        <li>My Property</li>
                     </Link>
                 </ul>
                 <div

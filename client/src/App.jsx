@@ -11,6 +11,9 @@ import LoggedInHeader from "./components/LoggedInHeader";
 import PageNotFound from "./pages/PageNotFound";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./pages/PrivateRoute";
+import FindProperty from "./pages/FindProperty";
+import MyProperties from "./pages/MyProperties";
+import AddProperty from "./pages/AddProperty";
 
 export default function App() {
 
@@ -29,6 +32,9 @@ export default function App() {
         <Route path="/signup" element={<SignUp/>}/>
         <Route element={<PrivateRoute/>}>
           <Route path="/profile" element={<Profile/>}/>
+          <Route path="/findproperty" element={<FindProperty/>}/>
+          <Route path="/myproperties" element={<MyProperties/>}/>
+          <Route path="/addproperty" element={<AddProperty/>}/>
         </Route>
         <Route path="*" element={<PageNotFound/>}/>
       </Routes>

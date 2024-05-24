@@ -40,8 +40,15 @@ export default function Profile() {
 
     const[image,setImage]=useState(null);
 
+    const handleInputChange=(e)=>{
+        const{name,value}=e.target;
+        setFormData({...formData,[name]:value});
+    }
+
     const handleImageChange=(e)=>{
-        setImage(e.target.files[0]);
+        if(image){
+            setImage(e.target.files[0]);
+        }
     }
 
     const handleButtonClick = () => {
@@ -51,6 +58,10 @@ export default function Profile() {
     const uploadFileToFireBase=async(e)=>{
         e.preventDefault();
         dispatch(loading());
+        if(!image){
+            handleFormSubmit();
+            return;
+        }
         try {
             const storage=getStorage(firebaseApp);
             const fileName=image.name;
@@ -74,18 +85,19 @@ export default function Profile() {
             )
         } catch (error) {
             showErrorMessage(error.message);
+            setFormData(initialFormData);
         }
     }
      
     const handleFormSubmit=async()=>{
         console.log(formData);
         try {
-            const response=await fetch('/api/user/updateprofile',{
+            const response=await fetch('/api/user/updateuser',{
                 method:"PUT",
                 headers:{
                     "Content-Type":"application/json"
                 },
-                body:JSON.stringify(FormData)
+                body:JSON.stringify(formData)
             })
             const responseData=await response.json();
             if(response.ok){
@@ -97,6 +109,7 @@ export default function Profile() {
             showErrorMessage(responseData.message);
         } catch (error) {
             showErrorMessage(error.message)
+            setFormData(initialFormData);
             
         }
     }
@@ -135,6 +148,9 @@ export default function Profile() {
                         placeholder="firstname"
                         className="h-10 rounded-lg bg-gray-100 px-2 py-1"
                         name="firstname"
+                        value={formData.firstname}
+                        onChange={handleInputChange}
+                        required
                     />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -144,6 +160,9 @@ export default function Profile() {
                         placeholder="lastname"
                         className="h-10 rounded-lg bg-gray-100 px-2 py-1"
                         name="lastname"
+                        value={formData.lastname}
+                        onChange={handleInputChange}
+                        required
                     />
                 </div>
             </div>
@@ -154,6 +173,9 @@ export default function Profile() {
                         placeholder="email"
                         className="h-10 rounded-lg bg-gray-100 px-2 py-1"
                         name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
                     />
             </div>
             <div className="flex flex-col gap-2">
@@ -163,6 +185,8 @@ export default function Profile() {
                         placeholder="phonenumber"
                         className="h-10 rounded-lg bg-gray-100 px-2 py-1"
                         name="phonenumber"
+                        value={formData.phonenumber}
+                        onChange={handleInputChange}
                     />
             </div>
             <div className="flex flex-col gap-2">
@@ -172,6 +196,8 @@ export default function Profile() {
                         placeholder="address"
                         className="h-10 rounded-lg bg-gray-100 px-2 py-1"
                         name="address"
+                        value={formData.address}
+                        onChange={handleInputChange}
                     />
             </div>
             <SubmitButton title='Save'/>

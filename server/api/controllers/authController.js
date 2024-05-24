@@ -90,13 +90,14 @@ export const GoogleLogin=async(req,res)=>{
         const generatedPassword=Math.random().toString(36).slice(-8);
         const hashedPassword=bcryptjs.hashSync(generatedPassword,10);
         const newUser=new userModel({
+            email:email,
             username:generetedUsername,
             password:generatedPassword,
             profilePicture:profilePicture,
         })
 
         await newUser.save();
-        const{password:pass,...userDetails}=validUser._doc;
+        const{password:pass,...userDetails}=newUser._doc;
             const token=jwt.sign({id:validUser._id},process.env.jwt_secret_key);
             res.cookie('access_token',token,{httpOnly:true})
                 .status(200).json({

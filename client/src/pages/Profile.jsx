@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRef } from "react";
 import { toast } from "react-toastify";
 import { firebaseApp } from "../firebase.js";
-import {getDownloadURL, getStorage,ref, uploadBytesResumable} from 'firebase/storage';
+import {getDownloadURL, getStorage,ref, uploadBytes} from 'firebase/storage';
 import { useDispatch } from "react-redux";
 import { loading,updateProfileFailure,updateProfileSuccess } from "../redux/User/userSlice.js";
 
@@ -46,51 +46,37 @@ export default function Profile() {
     }
 
     const handleImageChange=(e)=>{
-        if(image){
-            setImage(e.target.files[0]);
-        }
+        setImage(e.target.files[0]);
     }
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
 
-    const uploadFileToFireBase=async(e)=>{
-        e.preventDefault();
+    const uploadFileToFireBase=async()=>{
         dispatch(loading());
-        if(!image){
-            handleFormSubmit();
-            return;
-        }
         try {
             const storage=getStorage(firebaseApp);
             const fileName=image.name;
             const storageUrl=ref(storage,`${session.userDetails._id}/profile/${fileName}`)
-            const uploadTask=uploadBytesResumable(storageUrl,image);
-            uploadTask.on(
-                'state_changed',
-                (snapshot)=>{
-                    const progress=(snapshot.bytesTransferred/snapshot.totalBytes)*100;
-                    console.log(progress.toFixed(0));
-                },
-                (error)=>{
-                    showErrorMessage(error.message);
-                },
-                ()=>{
-                    getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl)=>{
-                        setFormData({...formData,profilePicture:downloadUrl});
-                        handleFormSubmit();
+            uploadBytes(storageUrl,image).then((snapshot)=>{
+                getDownloadURL(snapshot.ref)
+                    .then((url)=>{
+                        setFormData({...formData,profilePicture:url})
                     })
-                }
-            )
+                    .catch((error)=>{
+                        showErrorMessage(error.message)
+                    })
+            }).catch((error)=>{
+                showErrorMessage(error.message)
+            })
+            
         } catch (error) {
             showErrorMessage(error.message);
-            setFormData(initialFormData);
         }
     }
      
     const handleFormSubmit=async()=>{
-        console.log(formData);
         try {
             const response=await fetch('/api/user/updateuser',{
                 method:"PUT",
@@ -114,6 +100,16 @@ export default function Profile() {
         }
     }
     
+    const mainSubmit=async(e)=>{
+        e.preventDefault();
+        if(!image){
+            await handleFormSubmit();
+            return;
+        }
+        await uploadFileToFireBase();
+        console.log(formData);
+        await handleFormSubmit();
+    }
 
   return (
     <div className="flex flex-col gap-8 items-center py-4">
@@ -139,7 +135,7 @@ export default function Profile() {
                 />
             </div>
         </div>
-        <form onSubmit={uploadFileToFireBase} className="flex flex-col gap-8">
+        <form onSubmit={mainSubmit} className="flex flex-col gap-8">
             <div className="flex gap-14">
                 <div className="flex flex-col gap-2">
                     <label>First Name</label>
